@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأملات في آية الكرسي</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+                        quran: ['"Amiri"', 'serif'],
+                    },
+                    colors: {
+                        apple: { light: '#F5F3EF', dark: '#111827' },
+                        quran: { bg: '#F8F6F1', text: '#31473A', border: '#D6CFC2' },
+                        lang: { bg: '#F4EFE7', accent: '#8B6F47' },
+                        tafsir: { bg: '#F3F4F6', accent: '#6B7280' },
+                        reflect: { bg: '#1F2937', text: '#F9FAFB', gold: '#C6A96B' },
+                        hadith: { bg: '#F5F7F4', accent: '#4B6B4E' },
+                        aqeedah: { bg: '#EEF4F1', accent: '#2F5D50' },
+                        benefit: { bg: '#F7F3EA', accent: '#A17635' },
+                        grammar: { bg: '#F6F1E8', accent: '#7C5E36' }
+                    },
+                    boxShadow: {
+                        'apple': '0 8px 32px -8px rgba(0, 0, 0, 0.04), 0 4px 16px -4px rgba(0, 0, 0, 0.02)',
+                        'apple-hover': '0 20px 48px -12px rgba(0, 0, 0, 0.08), 0 12px 24px -8px rgba(0, 0, 0, 0.04)',
+                        'apple-dark': '0 8px 32px -8px rgba(0, 0, 0, 0.3)',
+                        'apple-dark-hover': '0 20px 48px -12px rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ambient Background Details */
+        .ambient-bg {
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(245, 243, 239, 0.8) 0%, rgba(255,255,255,0) 50%);
+            filter: blur(120px); z-index: -1; pointer-events: none;
+        }
+        .dark .ambient-bg { background: radial-gradient(circle at 50% 50%, rgba(17, 24, 39, 0.8) 0%, rgba(0,0,0,0) 50%); }
+        
+        /* Details Summary Reset */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        
+        /* Smooth Details Open */
+        details[open] summary ~ * { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Base Dark Mode Overrides for Custom Colors */
+        .dark .bg-quran-bg { background-color: #1f2937; border-color: #374151; }
+        .dark .text-quran-text { color: #f3f4f6; }
+        .dark .bg-tafsir-bg, .dark .bg-lang-bg, .dark .bg-hadith-bg, .dark .bg-aqeedah-bg, .dark .bg-benefit-bg, .dark .bg-grammar-bg { background-color: #1f2937; }
+        .dark .text-gray-800 { color: #e5e7eb; }
+        .dark .text-gray-600 { color: #9ca3af; }
+    </style>
+</head>
+<body class="bg-apple-light dark:bg-apple-dark text-gray-800 dark:text-gray-200 transition-colors duration-300 relative">
+    
+    <div class="ambient-bg"></div>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <h1 class="text-lg font-bold font-sans">تأملات قرآنية</h1>
+            <div class="flex gap-4">
+                <button id="btn-text-size" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition" aria-label="تغيير حجم النص">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <button id="btn-theme" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition" aria-label="تبديل الوضع">
+                    <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 py-16 flex flex-col gap-24" id="main-content">
+        
+        <!-- 1. Hero Section -->
+        <section class="flex flex-col gap-6 items-center text-center pt-10 pb-6">
+            <span class="px-4 py-1.5 rounded-full bg-reflect-gold/20 text-reflect-gold text-sm font-semibold tracking-wide">
+                آية مفردة / دراسة تحليلية
+            </span>
+            <h1 class="text-4xl md:text-6xl font-bold font-quran text-gray-900 dark:text-white leading-tight">
+                تأملات في آية الكرسي
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed">
+                دراسة عقدية وبلاغية ولغوية مفصلة لأعظم آية في كتاب الله، وبيان ما اشتملت عليه من معاني التوحيد والعظمة، وسعة الصفات لله عز وجل، جملة جملة.
+            </p>
+        </section>
+
+        <!-- 2. المقدمة العامة -->
+        <section class="flex flex-col gap-10">
+            <div class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:shadow-apple-hover">
+                <h2 class="text-2xl font-bold mb-8 text-quran-text dark:text-white border-b border-gray-200 dark:border-gray-700 pb-4">المقدمة والفضائل</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="flex flex-col gap-4">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">التعريف والمكانة</h3>
+                        <ul class="flex flex-col gap-3 text-gray-600 dark:text-gray-300 leading-relaxed">
+                            <li><strong class="text-gray-800 dark:text-white">الموضع:</strong> سورة البقرة، الآية 255. وهي آية مفردة.</li>
+                            <li><strong class="text-gray-800 dark:text-white">سبب التسمية:</strong> سُمّيت آية الكرسي لذكر "الكرسي" فيها، ولم يُذكر في القرآن الكريم إلا في هذه الآية.</li>
+                            <li><strong class="text-gray-800 dark:text-white">عناية العلماء:</strong> اهتموا بها اهتماماً كبيراً؛ فأفردها بعضهم بالتفسير، واعتنوا بها حتى قالوا إنها اشتملت على ثمانية عشر اسماً لله تعالى (بين ظاهر ومضمر)، وكلماتها خمسون، وجملها عشر.</li>
+                        </ul>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">الفضائل والأحاديث</h3>
+                        <div class="bg-hadith-bg dark:bg-gray-700 p-5 rounded-2xl flex flex-col gap-3 text-gray-700 dark:text-gray-300">
+                            <ul class="list-disc list-inside space-y-3">
+                                <li><strong>أعظم آية في القرآن:</strong> لحديث مسلم حين سأل النبي ﷺ أُبي بن كعب رضي الله عنه عنها، فأجاب بها، فضرب في صدره وقال: <span class="font-semibold text-hadith-accent dark:text-yellow-500">«ليهنك العلم يا أبا المنذر»</span>.</li>
+                                <li><strong>تعظيم الملائكة لها:</strong> زاد الإمام أحمد: <span class="font-semibold text-hadith-accent dark:text-yellow-500">«والذي نفسي بيده، إن لها لسانًا وشفتين تقدس الملك عند ساق العرش»</span>.</li>
+                                <li><strong>الوقاية من الجن:</strong> في قصة أُبي مع الجني: <span class="font-semibold text-hadith-accent dark:text-yellow-500">«صدق الخبيث»</span>، ونحوه في حديث أبي هريرة: <span class="font-semibold text-hadith-accent dark:text-yellow-500">«صدقك وهو كذوب»</span>.</li>
+                                <li><strong>سبب الفضل:</strong> لأنها حوت كثيراً من معاني التوحيد والعظمة وسعة الصفات، كما فضلت سورة الإخلاص بذلك.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-10 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200">مناسبتها لما قبلها (كالبرزخ المتوسط)</h3>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
+                            الآية التي قبلها (يَا أَيُّهَا الَّذِينَ آمَنُوا أَنْفِقُوا...) تخبر عن أهوال يوم القيامة (لَا بَيْعٌ فِيهِ وَلَا خُلَّةٌ وَلَا شَفَاعَةٌ). فجاءت آية الكرسي بعدها كاستئناف وابتداء جديد بذكر تمجيد الله وصفاته؛ إبطالاً لكفر الكافرين، وقطعاً لرجائهم، مبينة أن الشفاعة منتفية إلا لمن أذن له.
+                            <br><br>
+                            يقول شيخ الإسلام: "إن الله عز وجل نفى عما سواه كل ما يتعلق به المشركون... فلما نفى كل ذلك لم يبق إلا الشفاعة، فبيّن أنها أيضًا لا تنفع إلا لمن أذن له الرب". فصارت الآية برزخاً بين أهوال القيامة السابقة، وآيات تقرير الوحدانية اللاحقة.
+                        </p>
+                    </div>
+                    <div class="flex-1 bg-benefit-bg dark:bg-gray-700 p-6 rounded-2xl">
+                        <h3 class="text-xl font-semibold mb-3 text-benefit-accent dark:text-yellow-500">تنبيهات في التلاوة الصحيحة</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm mb-2">لكثرة تكرارها في الأذكار، وجب الحذر من أخطاء شائعة:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+                            <li><strong>﴿سِنَةٌ﴾:</strong> بكسر السين (النعاس)، والخطأ الشائع فتحها (سَنة) فيتغير المعنى للعام.</li>
+                            <li><strong>﴿وَسِعَ﴾:</strong> وجب ضبطها وعدم نطقها بالنطق العامي.</li>
+                            <li><strong>﴿كُرْسِيُّهُ﴾:</strong> الخطأ في الإخلال بضبط حركاتها.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. التفسير التفصيلي بحسب الجمل -->
+
+        <!-- الجملتان الأولى والثانية -->
+        <section class="flex flex-col gap-16">
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        إخبار بأن الله عز وجل هو المتفرد بالألوهية، المستحق للعبادة حباً وتعظيماً، فلا يستحق العبادة غيره. وبقية الآية هي تقرير لذلك وبيان لموجباته المتمثلة في كمال حياته وقيوميته.
+                    </p>
+                </div>
+
+                <div class="bg-lang-bg dark:bg-gray-700 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">الإله</h3>
+                        <p class="text-gray-700 dark:text-gray-300">المألوه، أي المعبود بحق.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">الحي</h3>
+                        <p class="text-gray-700 dark:text-gray-300">من له الحياة الكاملة الأبدية الأزلية التي تليق بجلاله، وتستلزم جميع صفات الذات كالسمع والبصر والعلم.</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">القيوم</h3>
+                        <p class="text-gray-700 dark:text-gray-300">كثير القيام على الشيء مع حسن تدبيره. يشمل كونه قائماً بنفسه (غني دائم)، وقائماً بتدبير خلقه؛ فلا قوام للموجودات بدون أمره ﴿وَمِنْ آيَاتِهِ أَنْ تَقُومَ السَّمَاءُ وَالْأَرْضُ بِأَمْرِهِ﴾.</p>
+                    </div>
+                </div>
+
+                <div class="bg-aqeedah-bg dark:bg-gray-700 p-8 rounded-3xl flex flex-col gap-4">
+                    <h3 class="text-xl font-bold text-aqeedah-accent dark:text-teal-400">المسائل العقدية (اسم الله الأعظم)</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+                        هذان الاسمان (الحي القيوم) يدلان دلالة مطابقة وتضمن ولزوم على سائر الأسماء الحسنى؛ فـ (الحي) يجمع الأوصاف الذاتية، و(القيوم) يجمع الأفعال المتعدية والتدبير (كالاستواء والنزول والخلق والرزق). 
+                        ولهذا قال كثير من العلماء: إن "الحي القيوم" هو <span class="font-bold">اسم الله الأعظم</span>. وفي إثباتهما إبطال لاستحقاق آلهة المشركين للعبادة التي لا تسمع ولا تبصر ﴿لِمَ تَعْبُدُ مَا لَا يَسْمَعُ وَلَا يُبْصِرُ﴾.
+                    </p>
+                </div>
+
+                <div class="bg-reflect-bg text-reflect-text rounded-3xl p-8 border border-reflect-gold/30 shadow-inner flex flex-col gap-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg class="w-6 h-6 text-reflect-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                        <h3 class="text-xl font-bold text-reflect-gold">النكت البلاغية: الفصل وعدم العطف بالواو</h3>
+                    </div>
+                    <p class="leading-relaxed text-sm text-gray-300">
+                        كثير من أهل البلاغة يجعلون (الحي القيوم) جملة مستقلة (خبر لمبتدأ محذوف: هو الحي القيوم)، وهذه الجملة هي <span class="text-reflect-gold font-bold">بيان وتفسير</span> للجملة الأولى (الله لا إله إلا هو).
+                        والقاعدة البلاغية: أن الجملة إذا كانت بياناً وتفسيراً لما قبلها فإنها تُفصل ولا تُوصل بالواو.
+                    </p>
+                </div>
+
+                <!-- التفاصيل اللغوية المتقدمة -->
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>الإعراب المتعدد</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                <strong>الله:</strong> مبتدأ.<br>
+                                <strong>لا إله إلا هو:</strong> جملة اسمية في محل رفع خبر المبتدأ الأول. (لا) نافية للجنس، (إله) اسمها، (إلا) أداة استثناء، (هو) بدل من الضمير المستتر في الخبر المحذوف.<br>
+                                <strong>الحي القيوم:</strong> إما خبر ثان وثالث للمبتدأ (الله) (وتعدد الخبر لا يعني تعدد الجمل كقولك زيد كاتب شاعر)، أو خبر لمبتدأ محذوف (هو الحي) لتكون جملة مفسرة.
+                            </div>
+                        </details>
+
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>الصرف والقراءات في (القيوم)</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li><strong>القَيُّوم:</strong> (فيعول) صيغة مبالغة سماعية نادرة، قراءة الجمهور المتواترة.</li>
+                                    <li><strong>القَيَّام:</strong> (فعّال) صيغة قياسية كضرّاب، قراءة شاذة (لعمر وابن مسعود رضي الله عنهما).</li>
+                                    <li><strong>القَيِّم:</strong> (فيعل) كجيد وسيد، قراءة شاذة.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> إثبات تفرد الله بالألوهية، المؤسس على كمال حياته الذاتية وقيوميته المطلقة التي تفتقر إليها جميع المخلوقات.
+                </div>
+            </article>
+
+            <!-- الجملة الثالثة -->
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        المراد أن من تمام حياته وقيوميته أنه لا يعتريه نقص ولا غفلة ولا ذهول عن خلقه، فهو قائم على كل نفس لا تخفى عليه خافية، ولا يعتريه نعاس ولا نوم.
+                    </p>
+                </div>
+
+                <div class="bg-lang-bg dark:bg-gray-700 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">تأخذه</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm">تغلبه وتعتليه، من قولهم: أخذت فلاناً أي غلبته على أمره.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">سِنَةٌ</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm">أول النوم (النعاس)، غير داخل في حد النوم. وفعلها: وسِنَ يوسَن وسَناً وسِنةً.</p>
+                    </div>
+                </div>
+
+                <div class="bg-hadith-bg dark:bg-gray-700 p-8 rounded-3xl flex flex-col gap-6">
+                    <h3 class="text-xl font-bold text-hadith-accent dark:text-teal-400">الشواهد والاستدلالات</h3>
+                    <div class="flex flex-col gap-4">
+                        <div class="bg-white/60 dark:bg-gray-800/60 p-4 rounded-xl">
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">حديث أبي موسى رضي الله عنه (في صحيح مسلم):</p>
+                            <p class="text-gray-600 dark:text-gray-400 italic text-sm">«إن الله لا ينام، ولا ينبغي له أن ينام، يخفض القسط ويرفعه... حجابه النور لو كشفه لأحرقت سبحات وجهه ما انتهى إليه بصره من خلقه».</p>
+                        </div>
+                        <div class="bg-white/60 dark:bg-gray-800/60 p-4 rounded-xl">
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">شاهد لغوي للتفريق بين السِّنة والنوم (قول عدي بن الرقاع العاملي):</p>
+                            <p class="font-quran text-lg leading-loose text-center text-gray-800 dark:text-gray-200">
+                                وسنانُ أقصده النعاسُ فرنّقت<br>في عينه <span class="text-hadith-accent dark:text-yellow-500 font-bold">سِنةٌ</span> وليس <span class="text-hadith-accent dark:text-yellow-500 font-bold">بنائمِ</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-reflect-bg text-reflect-text rounded-3xl p-8 border border-reflect-gold/30 shadow-inner flex flex-col gap-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg class="w-6 h-6 text-reflect-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-bold text-reflect-gold">النكت البلاغية والروابط</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+                        <div>
+                            <h4 class="font-bold text-white mb-2">الفصل بلا واو</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                جاءت الجملة مفصولة لأنها تكملة وتفسير لـ (الحي القيوم)؛ فمن أخذه سنة كان ناقص الحياة. ومن أمثلة الفصل للتفسير في القرآن: ﴿مَا هَذَا بَشَرًا إِنْ هَذَا إِلَّا مَلَكٌ كَرِيمٌ﴾، وفي الشعر: "إنما الدنيا فناءٌ / ليس للدنيا ثبوتُ" (فالشطر الثاني تفسير للأول).
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2">الترقي في النفي</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                قُدّمت السِّنة على النوم لموافقة الواقع، ولـ (قياس المبالغة والترقي)؛ فنفي النعاس وحده لا يكفي إذ قد يغلبه النوم، فنفى الأخف ثم ترقى للأقوى ونفاه.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-1/2">
+                        <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                            <span>الإعراب</span>
+                            <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                            <strong>لا تأخذه سنة ولا نوم:</strong> جملة فعلية في محل رفع خبر ثالث أو رابع للمبتدأ (الله).
+                        </div>
+                    </details>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> تنزيه الله عن كل نقص يعتري المخلوقين من غفلة أو نعاس، تأكيداً لكمال يقظته وقيوميته المطلقة.
+                </div>
+            </article>
+
+            <!-- الجملة الرابعة -->
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي والمسائل العقدية</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        إخبار بأن الجميع عبيده وفي ملكه المطلق، وتحت قهره وسلطانه، ﴿إِنْ كُلُّ مَنْ فِي السَّمَاوَاتِ وَالْأَرْضِ إِلَّا آتِي الرَّحْمَنِ عَبْدًا﴾.
+                    </p>
+                </div>
+
+                <div class="bg-reflect-bg text-reflect-text rounded-3xl p-8 border border-reflect-gold/30 shadow-inner flex flex-col gap-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg class="w-6 h-6 text-reflect-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-bold text-reflect-gold">النكت البلاغية والمناسبات</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+                        <div>
+                            <h4 class="font-bold text-white mb-2">الرابط المعنوي (الفصل)</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                هذه الجملة تقرير وبيان لنفي السِّنة والنوم المذكور قبلها مباشرة (ولذلك فُصلت بلا واو)؛ فالذي يملك السماوات والأرض ويحفظهما بتدبيره لا يمكن أن ينام وإلا لزالتا عن النظام.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2">الجمع والإفراد</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                جُمعت "السماوات" وأُفردت "الأرض" لأوجه: الاكتفاء بجمع الأول، خفة اللفظ (الأراضون أثقل)، وبلاغياً للإشارة إلى عظم السماوات مقابل الأرض فكأنها جزء صغير.
+                            </p>
+                        </div>
+                        <div class="md:col-span-2 border-t border-gray-600/50 pt-4 mt-2">
+                            <h4 class="font-bold text-white mb-2">التعبير بـ (ما) لغير العاقل</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                غلّبت الآية غير العقلاء فاستخدمت ﴿مَا﴾ لكثرتهم، بخلاف آيات استخدمت ﴿مَنْ﴾ تغليباً لشرف العقلاء، والكل في ملكه سواء.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-1/2">
+                        <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                            <span>الإعراب</span>
+                            <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                            <strong>له ما في السماوات وما في الأرض:</strong> جملة اسمية. (له) شبه جملة خبر مقدم، (ما) اسم موصول مبتدأ مؤخر. والجملة في محل رفع خبر آخر لاسم الجلالة.
+                        </div>
+                    </details>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> إثبات سعة الملك وشمول التدبير لكل ما في السماوات والأرض، وهو دليل على امتناع الغفلة والنوم عليه سبحانه.
+                </div>
+            </article>
+
+            <!-- الجملة الخامسة -->
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        لا أحد من هؤلاء المذكورين يملك أن يشفع لأحد عند الله إلا بإذنه، فالجميع يقفون يوم القيامة وعليهم الذل، ولا يتجاسر أحد أن يبتدئ الشفاعة بنفسه.
+                    </p>
+                </div>
+
+                <div class="bg-aqeedah-bg dark:bg-gray-700 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="flex flex-col gap-3">
+                        <h3 class="text-xl font-bold text-aqeedah-accent dark:text-teal-400">إبطال حجج الشرك</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+                            الآية ترد على المشركين القائلين: ﴿مَا نَعْبُدُهُمْ إِلَّا لِيُقَرِّبُونَا إِلَى اللَّهِ زُلْفَى﴾، مبيّنة أنه حتى لو صحت عبادتهم فهم لا يملكون من الله حق الشفاعة أصلاً دون إذنه.
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <h3 class="text-xl font-bold text-aqeedah-accent dark:text-teal-400">شفاعة أكرم الخلق ﷺ</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+                            حتى النبي ﷺ لا يبادر من نفسه؛ ففي حديث الشفاعة: <span class="font-semibold italic">«فأخر ساجدًا... ثم يقال: ارفع رأسك، واشفع تُشفّع»</span>، فليس لأحد مكانة تجعله يشفع دون إذن.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-reflect-bg text-reflect-text rounded-3xl p-8 border border-reflect-gold/30 shadow-inner flex flex-col gap-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg class="w-6 h-6 text-reflect-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-bold text-reflect-gold">دلالة الاستفهام البلاغية</h3>
+                    </div>
+                    <p class="leading-relaxed text-sm text-gray-300">
+                        جاءت بأسلوب الاستفهام ﴿مَنْ ذَا...﴾: للمؤمنين هو <span class="text-reflect-gold font-bold">استفهام تقريري</span> يقرر المعنى. وللكافرين هو <span class="text-reflect-gold font-bold">استفهام إنكاري توبيخي</span> على ظنهم الباطل بفاعلية آلهتهم.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>إعراب الجملة</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                جملة اسمية استفهامية في محل رفع خبر آخر عن اسم الجلالة.
+                            </div>
+                        </details>
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>إعراب (مَن ذا)</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                <strong>مَن:</strong> اسم استفهام. <strong>ذا:</strong> في الأصل اسم إشارة لكنها هنا ملغاة، جُعلت مع "مَن" كالكلمة الواحدة للاستفهام والتفخيم، ويجوز لغة حذفها (مَن يشفع).
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> تقرير كبرياء الله وعظمته بنفي استقلالية أي مخلوق بالشفاعة مهما علت مكانته إلا بعد إذنه.
+                </div>
+            </article>
+
+            <!-- الجملة السادسة والسابعة -->
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        يعلم ماضيهم (ما خلفهم: دنياهم وما عملوا فيها) ومستقبلهم (ما بين أيديهم: الآخرة وحسابها). وإذا كان يعلم ماضيهم ومستقبلهم فهو يعلم حاضرهم. وهم في المقابل لا يطلعون على شيء من معلوم الله ولا من علم ذاته وصفاته إلا بما أطلعهم عليه بالوحي ﴿وَلَا يُحِيطُونَ بِهِ عِلْمًا﴾.
+                    </p>
+                </div>
+
+                <div class="bg-reflect-bg text-reflect-text rounded-3xl p-8 border border-reflect-gold/30 shadow-inner flex flex-col gap-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg class="w-6 h-6 text-reflect-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-bold text-reflect-gold">النكت البلاغية والروابط</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+                        <div>
+                            <h4 class="font-bold text-white mb-2">الفصل (يعلم ما بين أيديهم...)</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                جاءت مفصولة بلا واو لأنها تدليل على الآية السابقة وتكملة لها: فهو مستحق أن تكون الشفاعة بإذنه، لأنه العالم بجميع أحوال خلقه، فيعلم من يستحق الشفاعة ممن لا يستحقها.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2">الوصل (ولا يحيطون...) وتقابل الجملتين</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                عُطفت (ولا يحيطون) بالواو لتدل الجملتان معاً على التفرد التام: "الله يعلم وهم لا يحيطون"، ومجموع الجملتين تقرير وتعليل للكلام عن الشفاعة.
+                            </p>
+                        </div>
+                        <div class="md:col-span-2 border-t border-gray-600/50 pt-4 mt-2">
+                            <h4 class="font-bold text-white mb-2">تغليب العقلاء في الضمير (أيديهم وخلفهم)</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                عاد الضمير (هم) الدال على العقلاء إلى قوله ﴿مَا فِي السَّمَاوَاتِ﴾ (التي استخدمت "ما" لغير العاقل)، تغليباً للعقلاء هنا لأنهم من يتصور إذن الله لهم بالشفاعة (ملائكة، جن، إنس)، وتوافقاً مع أداة الاستفهام للعاقل ﴿مَنْ ذَا﴾.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-1/2">
+                        <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                            <span>الإعراب</span>
+                            <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                            <strong>يعلم...:</strong> جملة فعلية خبر آخر لاسم الجلالة.<br>
+                            <strong>ولا يحيطون...:</strong> جملة معطوفة على الجملة الفعلية (يعلم).
+                        </div>
+                    </details>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> إثبات إحاطة علمه الشاملة بالخلق ماضياً ومستقبلاً، ونفي إحاطتهم بشيء من علمه إلا بوحيه، وهذا هو موجب اختصاصه بالإذن في الشفاعة.
+                </div>
+            </article>
+
+            <!-- الجملة الثامنة والتاسعة -->
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي والروابط</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        احتمل وأطاق كرسيه السماوات والأرض. ولا يثقله ولا يشق عليه حفظهما بما فيهما، بل ذلك يسير عليه. وهو تأكيد للجملة السابقة: فإذا كان كرسيه قد وسع السماوات والأرض، فكيف بعظمة الخالق جل جلاله وإحاطة علمه؟
+                    </p>
+                </div>
+
+                <div class="bg-aqeedah-bg dark:bg-gray-700 p-8 rounded-3xl flex flex-col gap-4">
+                    <h3 class="text-xl font-bold text-aqeedah-accent dark:text-teal-400">عقيدة السلف في الكرسي</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+                        الكرسي ليس هو العرش (كما زعم بعضهم في قول ضعيف)، بل الأصح كما صح عن ابن عباس رضي الله عنهما: <strong>أنه موضع قدمي الرحمن من العرش</strong>. ومثل هذا لا يقال بالرأي بل هو متلقى.
+                        ويقول السدي بسند حسن: "السماوات والأرض في جوف الكرسي، والكرسي بين يدي العرش". 
+                        وفي الأثر: <span class="italic">«ما السماوات السبع في الكرسي إلا كحلقة ملقاة في أرض فلاة، وإن فضل العرش على الكرسي كفضل الفلاة على تلك الحلقة»</span>، وهذا يرد صراحةً على من وحد بين العرش والكرسي.
+                    </p>
+                </div>
+
+                <div class="bg-lang-bg dark:bg-gray-700 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">كرسيه (لغوياً)</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm">مأخوذ من (الكَرْس): وضع الشيء بعضه فوق بعض (ومنه الكراسة). والياء المشددة فيه من بنية الاسم وليست للنسب.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2 text-lang-accent dark:text-yellow-500">يَئُودُهُ</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm">يثقله ويتعبه ويشق عليه. يقال: آده الشيء يؤوده أودًا وإيادًا.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>الإعراب</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                <strong>وسع كرسيه...:</strong> جملة فعلية خبر آخر لاسم الجلالة.<br>
+                                <strong>ولا يؤوده...:</strong> جملة معطوفة على (وسع كرسيه).
+                            </div>
+                        </details>
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>بلاغة التثنية (حفظهما)</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                لماذا ثُنّى الضمير ﴿حفظهما﴾ ولم يقل (حفظها) رغم أن السماوات جمع؟ للإجابة: روعي الجنس؛ كأنه قال: ولا يؤوده حفظ (جنس) السماوات و(جنس) الأرض.
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> إثبات سعة المخلوقات العظيمة كالكرسي دلالة على كمال عظمة الخالق، وإثبات كمال قدرته بنفي التعب والمشقة عنه في حفظ العالم.
+                </div>
+            </article>
+
+            <!-- الجملة العاشرة -->
+            <article class="bg-white dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-100 dark:border-gray-700 transition hover:-translate-y-1 hover:shadow-apple-hover flex flex-col gap-10">
+                <div class="bg-quran-bg dark:bg-gray-900 border border-quran-border dark:border-gray-700 rounded-3xl p-10 text-center">
+                    <h2 class="font-quran text-4xl md:text-5xl leading-loose text-quran-text dark:text-white">
+                        ﴿وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾
+                    </h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">المعنى الإجمالي والمسائل العقدية</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                        هو العلي بذاته وقدره وقهره، العظيم الذي تتضاءل المخلوقات أمام عظمته. وهذه الجملة كالخاتمة والتعليل لكل ما سبق في الآية؛ فكل تلك الكمالات تحققت لأنه العلي العظيم.
+                    </p>
+                </div>
+
+                <div class="bg-aqeedah-bg dark:bg-gray-700 p-8 rounded-3xl flex flex-col gap-4">
+                    <h3 class="text-xl font-bold text-aqeedah-accent dark:text-teal-400">علو الله والتحذير من الطغيان</h3>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+                        علو الله عند أهل السنة والجماعة يشمل ثلاثة أقسام: <strong>علو الذات، وعلو القدر، وعلو القهر.</strong>
+                        وفي إثبات هذين الاسمين تحذير من الطغيان والتعاظم والتكبر؛ فإن كنت متعالياً فاذكر علو الله، وإن كنت عظيماً في نفسك فاذكر عظمة الله، كما قال في آية النساء: ﴿فَإِنْ أَطَعْنَكُمْ فَلَا تَبْغُوا عَلَيْهِنَّ سَبِيلًا ۗ إِنَّ اللَّهَ كَانَ عَلِيًّا كَبِيرًا﴾.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">تفاصيل لغوية متقدمة</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <details class="group bg-grammar-bg dark:bg-gray-700 rounded-xl cursor-pointer w-full md:w-auto flex-1">
+                            <summary class="flex items-center justify-between p-3 font-semibold text-grammar-accent dark:text-yellow-500 select-none text-sm">
+                                <span>الإعراب والعطف</span>
+                                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="p-3 pt-0 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-200/50 dark:border-gray-600">
+                                جملة معطوفة بالواو على ما قبلها، لأنها من تمام الكلام وليست مستقلة من كل وجه، بل هي كالتعليل. (العلي) و(العظيم): صفتان مشبهتان على وزن (فعيل).
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 border-r-4 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    <strong class="text-gray-800 dark:text-gray-200">خلاصة المقطع:</strong> تتويج كمالات الآية بصفتي العلو المطلق والعظمة التامة المقتضية لتواضع المخلوقات وذلها.
+                </div>
+            </article>
+
+        </section>
+
+        <!-- 4. الخصائص العامة لآية الكرسي -->
+        <section class="bg-lang-bg dark:bg-gray-800 rounded-[32px] p-8 md:p-14 shadow-apple border border-gray-200 dark:border-gray-700 transition hover:shadow-apple-hover flex flex-col gap-8">
+            <h2 class="text-2xl font-bold text-lang-accent dark:text-yellow-500 border-b border-gray-300 dark:border-gray-600 pb-4">الخصائص العامة لآية الكرسي</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">الشمول العقدي</h3>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <li>اشتملت على جميع أنواع التوحيد: الربوبية، الألوهية، الأسماء والصفات.</li>
+                        <li>هي بمفردها "عقيدة متكاملة" متضمنة لجميع الأسماء والصفات.</li>
+                        <li>إثبات 5 أسماء بالنص: (الله، الحي، القيوم، العلي، العظيم).</li>
+                        <li>إثبات القيومية ونفيها عن المخلوقين المفتقرين لبعضهم ﴿أَنْتُمُ الْفُقَرَاءُ إِلَى اللَّهِ﴾.</li>
+                        <li>إبطال حجج المشركين بالحجة العقلية، بنفي الحياة والقيومية عن آلهتهم، فنفى عنهم استحقاق العبادة.</li>
+                    </ul>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">الخصائص البلاغية (إيجاز الإيجاز)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <li><strong>الوحدة الموضوعية:</strong> الآية كلها تفسير وتأكيد لقوله (الحي القيوم) بنفي أضدادها وإثبات كمالاتها.</li>
+                        <li><strong>إيجاز الإيجاز:</strong> معاني الآية فخمة وممتلئة جداً ومحيطة بصفات الله، ومع ذلك صِيغت في جمل قصيرة موجزة.</li>
+                        <li><strong>التناسق والتكرار:</strong> مقاطعها قصيرة تكاد تكون متساوية، مهيأة لكثرة الترديد والتلاوة فلا يتعب قارئها، مما يناسب جعلها وِرداً يومياً في الأذكار.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4 border-t border-gray-300 dark:border-gray-600 pt-8">
+                <div class="flex flex-col gap-2">
+                    <span class="text-4xl font-light text-lang-accent/50 dark:text-yellow-500/30">١٨</span>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">اسماً لله تعالى</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">اشتملت على ثمانية عشر اسماً ظاهراً ومضمراً.</p>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <span class="text-4xl font-light text-lang-accent/50 dark:text-yellow-500/30">٥٠</span>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">كلمة</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">خمسون كلمة حوت الإعجاز العقدي والبلاغي.</p>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <span class="text-4xl font-light text-lang-accent/50 dark:text-yellow-500/30">١٠</span>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">جمل</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">عشر جمل قصيرة متوازنة يسهل ترديدها.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. الخلاصة النهائية -->
+        <section class="bg-gray-900 text-white rounded-[32px] p-8 md:p-14 shadow-apple-dark">
+            <h2 class="text-2xl font-bold mb-6 text-gray-100 border-b border-gray-700 pb-4">الخلاصة الكلية</h2>
+            <div class="flex flex-col gap-4 text-gray-300 leading-relaxed text-lg">
+                <p>
+                    تتجلى عظمة <strong>آية الكرسي</strong> في كونها برزخاً قرآنياً أُسس على تقرير تفرد الله بالألوهية، المرتكز على كمال الحياة الأزلية والقيومية التامة التي تنفي كل نقص كالسِّنة والنوم.
+                </p>
+                <p>
+                    تتسلسل الجمل الموجزة لترسم مشهد العظمة الإلهية المتمثل في سعة الملك (له ما في السماوات وما في الأرض)، والخضوع التام للخلق (لا يشفع عنده إلا بإذنه)، والإحاطة المطلقة بالعلم، وسعة الكرسي التي لا يثقله معها حفظ الأكوان.
+                </p>
+                <p>
+                    إنها عقيدة كاملة في أسماء الله وصفاته، تدحض الشرك، وتطرد الشياطين، وتورث القلب مهابة العلي العظيم وتواضعاً يحذر من الطغيان، فاستحقت بلفظها الموجز ومعناها الفخم أن تكون <strong>أعظم آية في كتاب الله.</strong>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme toggling
+            const btnTheme = document.getElementById('btn-theme');
+            const iconMoon = document.getElementById('icon-moon');
+            const iconSun = document.getElementById('icon-sun');
+            const htmlElement = document.documentElement;
+
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                iconMoon?.classList.add('hidden');
+                iconSun?.classList.remove('hidden');
+            } else {
+                htmlElement.classList.remove('dark');
+            }
+
+            btnTheme?.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                if (htmlElement.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                    iconMoon?.classList.add('hidden');
+                    iconSun?.classList.remove('hidden');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    iconMoon?.classList.remove('hidden');
+                    iconSun?.classList.add('hidden');
+                }
+            });
+
+            // Text size toggling
+            const btnTextSize = document.getElementById('btn-text-size');
+            const mainContent = document.getElementById('main-content');
+            let isLargeText = localStorage.getItem('largeText') === 'true';
+
+            const updateTextSize = () => {
+                if(!mainContent) return;
+                if (isLargeText) {
+                    mainContent.classList.add('text-lg');
+                    mainContent.classList.remove('text-base');
+                } else {
+                    mainContent.classList.add('text-base');
+                    mainContent.classList.remove('text-lg');
+                }
+            };
+            
+            updateTextSize();
+
+            btnTextSize?.addEventListener('click', () => {
+                isLargeText = !isLargeText;
+                localStorage.setItem('largeText', isLargeText);
+                updateTextSize();
+            });
+        });
+    </script>
+</body>
+</html>
